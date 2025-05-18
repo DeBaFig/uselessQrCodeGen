@@ -2,8 +2,8 @@
 {
     public class RankViewModel
     {
-        public int id { get; set; }
-        public string name { get; set; }
-        public int time { get; set; }
+        public int Id { get; set; }
+        public string Name { get; set; } = "";
+        public int LostTime { get; set; }
     }
 }

@@ -1,22 +1,31 @@
-using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using uselessQrCodeGen.Models;
+using uselessQrCodeGen.Services;
 
 namespace uselessQrCodeGen.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
+        private readonly IConfiguration _configuration;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(IConfiguration configuration)
         {
-            _logger = logger;
+            _configuration = configuration;
         }
 
-        public IActionResult Index()
+        [HttpGet]
+        public async Task<List<string>> GetUselessWebsites()
         {
-            return View();
+            try
+            {
+                var service = new UselessWebsitesService(_configuration);
+                return await service.GetUselessWebsitesJsonAsync();
+            }
+            catch (Exception ex)
+            {
+                // Log o erro se desejar
+                return new List<string>();
+            }
         }
-
     }
 }

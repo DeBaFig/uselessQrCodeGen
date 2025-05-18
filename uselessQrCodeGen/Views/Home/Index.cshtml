@@ -4,6 +4,13 @@
 <h2 class="text-3xl font-bold mb-6 text-center bg-gradient-to-r from-purple-500 to-pink-500 text-transparent bg-clip-text">
     Gerador de QR Code Para Daltônicos
 </h2>
+<div>Deseja guardar o quanto tempo você perdeu nisso?</div>
+<form id="rankingForm" method="post">
+    <input type="text" id="userName" name="userName" class="styled-input" placeholder="Digite seu nome" required maxlength="50" />
+    <p id="name-error" class="error-message">Por favor, insira um nome válido.</p>
+    <button id="add-to-ranking" type="submit" class="submit-button">Adicionar ao Ranking</button>
+</form>
+<div id="rankingMessage"></div>
 <div class="canvas-container">
     <canvas id="qrcodeCanvas"></canvas>
     <canvas id="indicationCanvas"></canvas>

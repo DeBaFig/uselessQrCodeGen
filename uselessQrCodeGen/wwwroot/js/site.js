@@ -40,10 +40,10 @@ let canvasWidth = 0;
 let paintedPixels = 0;
 let totalPixelsToPaint = 0;
 let timerInterval;
+let elapsedSeconds = 0;
 let seconds = 0;
 let minutes = 0;
 let paintedPositions = new Set();
-
 const ctx = indicationCanvas.getContext('2d');
 let cellSize = 0;
 
@@ -119,25 +119,48 @@ indicationCanvas.addEventListener("touchend", () => {
 indicationCanvas.addEventListener("touchcancel", () => {
     drawing = false;
 });
-
+function formatTime(totalSeconds) {
+    const hours = Math.floor(totalSeconds / 3600);
+    const minutes = Math.floor((totalSeconds % 3600) / 60);
+    const seconds = totalSeconds % 60;
+    const pad = n => n.toString().padStart(2, '0');
+    return `${pad(hours)}:${pad(minutes)}:${pad(seconds)}`;
+}
 function startTimer() {
+    elapsedSeconds = 0;
     timerInterval = setInterval(() => {
-        seconds++;
-        if (seconds === 60) {
-            minutes++;
-            seconds = 0;
-        }
-        const formattedSeconds = seconds < 10 ? "0" + seconds : seconds;
-        const formattedMinutes = minutes < 10 ? "0" + minutes : minutes;
-        timerDisplay.textContent = `Tempo: ${formattedMinutes}:${formattedSeconds}`;
+        elapsedSeconds++;
+        timerDisplay.textContent = `Tempo: ${formatTime(elapsedSeconds)}`;
     }, 1000);
 }
 
 function stopTimer() {
+    document.getElementById('rankingForm').style.display = 'block';
+    document.getElementById('rankingForm').addEventListener('submit', function (e) {
+        e.preventDefault();
+
+        fetch('/Home/AddRanking', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                Name: document.getElementById('userName').value,
+                LostTime: elapsedSeconds
+            })
+        })
+            .then(response => response.ok ? response.text() : Promise.reject())
+            .then(() => {
+                document.getElementById('rankingMessage').textContent = 'Ranking enviado com sucesso!';
+                document.getElementById('rankingForm').style.display = 'none';
+            })
+            .catch(() => {
+                document.getElementById('rankingMessage').textContent = 'Erro ao enviar ranking.';
+            });
+    });
     clearInterval(timerInterval);
 }
 
 generateQRCodeButton.addEventListener("click", () => {
+    document.getElementById('rankingMessage').textContent = '';
     const randomWebsite = uselessWebsites[Math.floor(Math.random() * uselessWebsites.length)];
 
     qrcodeCanvas.getContext('2d').clearRect(0, 0, qrcodeCanvas.width, qrcodeCanvas.height);
@@ -182,7 +205,7 @@ generateQRCodeButton.addEventListener("click", () => {
 
                 indCtx.fillStyle = "rgba(0, 0, 0, 0.1)";
                 indCtx.fillRect(col * cellSize, row * cellSize, cellSize, cellSize);
-                indCtx.strokeStyle = "#FF0000";
+                indCtx.strokeStyle = "#000000";
                 indCtx.lineWidth = 1;
                 indCtx.strokeRect(col * cellSize, row * cellSize, cellSize, cellSize);
             } else {

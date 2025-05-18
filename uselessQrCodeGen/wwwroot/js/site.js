@@ -64,7 +64,7 @@ function drawPixel(x, y) {
             startTimer();
         }
 
-        if (paintedPixels === 2) {
+        if (paintedPixels === totalPixelsToPaint) {
             stopTimer();
         }
     }

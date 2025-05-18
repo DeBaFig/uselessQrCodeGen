@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using System.Diagnostics;
 using uselessQrCodeGen.Models;
 using uselessQrCodeGen.Services;
 
@@ -6,26 +7,10 @@ namespace uselessQrCodeGen.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly IConfiguration _configuration;
-
-        public HomeController(IConfiguration configuration)
+        public IActionResult Index()
         {
-            _configuration = configuration;
+            return View();
         }
 
-        [HttpGet]
-        public async Task<List<string>> GetUselessWebsites()
-        {
-            try
-            {
-                var service = new UselessWebsitesService(_configuration);
-                return await service.GetUselessWebsitesJsonAsync();
-            }
-            catch (Exception ex)
-            {
-                // Log o erro se desejar
-                return new List<string>();
-            }
-        }
     }
 }

@@ -139,7 +139,7 @@ function stopTimer() {
     document.getElementById('rankingForm').addEventListener('submit', function (e) {
         e.preventDefault();
 
-        fetch('/Home/AddRanking', {
+        fetch('/RankingList/AddRanking', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({

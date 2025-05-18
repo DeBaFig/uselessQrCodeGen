@@ -1,0 +1,47 @@
+services:
+  web:
+    container_name: 'useless-app'
+    image: 'useless-app'
+    build:
+      context: .
+      dockerfile: ./uselessQrCodeGen/Dockerfile
+    restart: always
+    environment:
+      DB_HOST: 'postgres_useless'
+      DB_NAME: ${DB_NAME}
+      DB_USER: ${DB_USER}
+      DB_PASSWORD: ${DB_PASSWORD}
+    ports:
+     - "5000:80"
+    depends_on:
+     - "db"
+    networks:
+      - useless-network
+    env_file:
+      - .env
+
+  db:
+    container_name: 'postgres_useless'
+    image: 'useless-db'
+    build:
+      context: .
+      dockerfile: ./db/Dockerfile
+    environment:
+      POSTGRES_DB: ${DB_NAME}
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+    networks:
+      - useless-network
+    volumes:
+      - db-data:/var/lib/postgresql/data
+      # cria as tabelas
+      - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql
+    env_file:
+      - .env
+
+networks:
+  useless-network:
+    driver: bridge
+
+volumes:
+  db-data: {}

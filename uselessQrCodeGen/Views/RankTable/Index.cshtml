@@ -1,0 +1,26 @@
+﻿@{
+    ViewData["Title"] = "Rank de Perda de Tempo";
+}
+@model List<uselessQrCodeGen.Models.RankViewModel>
+<div class="container">
+    <h1>Rank de perda de Tempo</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nome</th>
+                <th>Tempo em Segundos</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.id</td>
+                    <td>@item.name</td>
+                    <td>@item.time</td>
+                </tr>
+            }   
+        </tbody>
+    </table>
+</div>

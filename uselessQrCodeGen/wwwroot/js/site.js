@@ -64,7 +64,7 @@ function drawPixel(x, y) {
             startTimer();
         }
 
-        if (paintedPixels === totalPixelsToPaint) {
+        if (paintedPixels === 2) {
             stopTimer();
         }
     }
@@ -139,7 +139,7 @@ function stopTimer() {
     document.getElementById('rankingForm').addEventListener('submit', function (e) {
         e.preventDefault();
 
-        fetch('/RankingList/AddRanking', {
+        fetch('/Home/AddRanking', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
